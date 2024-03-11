@@ -264,7 +264,7 @@ text-align: center;</string>
     <property name="title">
      <string>Достижения и награды</string>
     </property>
-    <addaction name="action_list_of_achievements"/>
+    <addaction name="action_list_achievements"/>
    </widget>
    <addaction name="menu_tasks"/>
    <addaction name="menu_achievements"/>
@@ -276,7 +276,7 @@ text-align: center;</string>
     <string>Добавить задачу</string>
    </property>
   </action>
-  <action name="action_list_of_achievements">
+  <action name="action_list_achievements">
    <property name="text">
     <string>Список достижений</string>
    </property>
