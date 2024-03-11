@@ -23,7 +23,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
 		self.action_show_statistics = ui.findChild(QtGui.QAction, "action_show_statistics")
 		self.action_show_statistics.triggered.connect(self.open_statistics)
+
+		self.action_change_theme = ui.findChild(QtGui.QAction, "action_change_theme")
+		self.action_change_theme.triggered.connect(self.open_choose_theme)
 	
+	def open_choose_theme(self):
+		'''Open the dialog list of themes'''
+
+		ui_choose_theme = getcwd() + "/ui/choose_theme.ui"
+		loader = QtUiTools.QUiLoader()
+		ui_choose_theme = QtCore.QFile(ui_choose_theme)
+		ui_choose_theme.open(QtCore.QFile.ReadOnly)
+		dialog_choose_theme = loader.load(ui_choose_theme)
+		ui_choose_theme.close()
+
+		dialog_choose_theme.exec()
+
 	def open_statistics(self):
 		'''Open the dialog of statistics'''
 
@@ -37,7 +52,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		dialog_statistics.exec()
 
 	def open_list_achievements(self):
-		'''Open the dialog of list achievements'''
+		'''Open the dialog list of achievements'''
 
 		ui_list_achievements = getcwd() + "/ui/achievements.ui"
 		loader = QtUiTools.QUiLoader()
@@ -49,7 +64,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		dialog_list_achievements.exec()
 
 	def open_create_task(self):
-		'''Open the dialog create_task to create and add new task'''
+		'''Open the dialog creation task to add a new task'''
 
 		ui_create_task = getcwd() + "/ui/create_task.ui"
 		loader = QtUiTools.QUiLoader()
