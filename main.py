@@ -15,6 +15,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
 		self.setCentralWidget(ui)
 
+		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
+
 		self.action_add_task = ui.findChild(QtGui.QAction, "action_add_task")
 		self.action_add_task.triggered.connect(self.open_create_task)
 
@@ -27,29 +29,35 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.action_change_theme = ui.findChild(QtGui.QAction, "action_change_theme")
 		self.action_change_theme.triggered.connect(self.open_choose_theme)
 	
-	def open_choose_theme(self):
-		'''Open the dialog list of themes'''
+	def open_create_task(self):
+		'''Open the dialog creation task to add a new task'''
 
-		ui_choose_theme = getcwd() + "/ui/choose_theme.ui"
+		#TODO ПЕРЕНОС ITEM !!!
+
+		ui_create_task = getcwd() + "/ui/create_task.ui"
 		loader = QtUiTools.QUiLoader()
-		ui_choose_theme = QtCore.QFile(ui_choose_theme)
-		ui_choose_theme.open(QtCore.QFile.ReadOnly)
-		dialog_choose_theme = loader.load(ui_choose_theme)
-		ui_choose_theme.close()
+		ui_create_task = QtCore.QFile(ui_create_task)
+		ui_create_task.open(QtCore.QFile.ReadOnly)
+		dialog_create_task = loader.load(ui_create_task)
+		ui_create_task.close()
 
-		dialog_choose_theme.exec()
+		textEdit_task_text = dialog_create_task.findChild(QtWidgets.QTextEdit, "textEdit_task_text")
+		pushButton_create = dialog_create_task.findChild(QtWidgets.QPushButton, "pushButton_create")
+		pushButton_cancel = dialog_create_task.findChild(QtWidgets.QPushButton, "pushButton_cancel")
 
-	def open_statistics(self):
-		'''Open the dialog of statistics'''
+		pushButton_create.clicked.connect(lambda: self.add_item_taskList(dialog_create_task, textEdit_task_text.toPlainText())) #self.add_item_taskList(dialog_create_task, "12312") #
+		pushButton_cancel.clicked.connect(dialog_create_task.reject)
 
-		ui_statistics = getcwd() + "/ui/statistics.ui"
-		loader = QtUiTools.QUiLoader()
-		ui_statistics = QtCore.QFile(ui_statistics)
-		ui_statistics.open(QtCore.QFile.ReadOnly)
-		dialog_statistics = loader.load(ui_statistics)
-		ui_statistics.close()
-
-		dialog_statistics.exec()
+		dialog_create_task.exec()
+	
+	def add_item_taskList(self, dialog, task_text):
+		if task_text == "":
+			return
+		else:
+			item = QtWidgets.QListWidgetItem(task_text)
+			item.setCheckState(QtCore.Qt.Unchecked)
+			self.listWidget_tasks.addItem(item)
+			dialog.reject()
 
 	def open_list_achievements(self):
 		'''Open the dialog list of achievements'''
@@ -63,17 +71,29 @@ class MainWindow(QtWidgets.QMainWindow):
 
 		dialog_list_achievements.exec()
 
-	def open_create_task(self):
-		'''Open the dialog creation task to add a new task'''
+	def open_statistics(self):
+		'''Open the dialog of statistics'''
 
-		ui_create_task = getcwd() + "/ui/create_task.ui"
+		ui_statistics = getcwd() + "/ui/statistics.ui"
 		loader = QtUiTools.QUiLoader()
-		ui_create_task = QtCore.QFile(ui_create_task)
-		ui_create_task.open(QtCore.QFile.ReadOnly)
-		dialog_create_task = loader.load(ui_create_task)
-		ui_create_task.close()
+		ui_statistics = QtCore.QFile(ui_statistics)
+		ui_statistics.open(QtCore.QFile.ReadOnly)
+		dialog_statistics = loader.load(ui_statistics)
+		ui_statistics.close()
 
-		dialog_create_task.exec()
+		dialog_statistics.exec()
+
+	def open_choose_theme(self):
+		'''Open the dialog list of themes'''
+
+		ui_choose_theme = getcwd() + "/ui/choose_theme.ui"
+		loader = QtUiTools.QUiLoader()
+		ui_choose_theme = QtCore.QFile(ui_choose_theme)
+		ui_choose_theme.open(QtCore.QFile.ReadOnly)
+		dialog_choose_theme = loader.load(ui_choose_theme)
+		ui_choose_theme.close()
+
+		dialog_choose_theme.exec()
 
 def main():
     app = QtWidgets.QApplication([])
