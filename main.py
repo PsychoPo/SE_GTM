@@ -9,6 +9,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def __init__(self):
 		super().__init__()
 
+		# TODO !!! Сделать удаление item!
+
 		ui_file = getcwd() + "/ui/gtm_main.ui"
 		loader = QtUiTools.QUiLoader()
 		ui_file = QtCore.QFile(ui_file)
@@ -95,8 +97,6 @@ class TimeQuest(QtWidgets.QMainWindow):
 
 	def open_create_task(self):
 		'''Open the dialog creation task to add a new task'''
-
-		#TODO ПЕРЕНОС ITEM !!!
 
 		ui_create_task = getcwd() + "/ui/create_task.ui"
 		loader = QtUiTools.QUiLoader()
