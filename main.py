@@ -1,8 +1,9 @@
 from os import getcwd
 from PySide6 import QtWidgets, QtUiTools, QtCore, QtGui
 from datetime import datetime
+import res.res_rc
 
-class MainWindow(QtWidgets.QMainWindow):
+class TimeQuest(QtWidgets.QMainWindow):
 	'''MainWindow class'''
 	def __init__(self):
 		super().__init__()
@@ -133,7 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 def main():
     app = QtWidgets.QApplication([])
-    window = MainWindow()
+    window = TimeQuest()
     window.show()
     app.exec()
 
