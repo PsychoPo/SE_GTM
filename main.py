@@ -38,16 +38,51 @@ class TimeQuest(QtWidgets.QMainWindow):
 		
 		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
 		self.listWidget_tasks.itemChanged.connect(self.update_progress_bar)
-		self.fill_task_from_db()
+		self.fill_tasks_from_db()
 		
 		self.progressBar_done_tasks = ui.findChild(QtWidgets.QProgressBar, "progressBar_done_tasks")
 		self.update_progress_bar()
 
-	def fill_task_from_db(self):
-		pass
+		QtCore.QCoreApplication.instance().aboutToQuit.connect(self.on_closing)
+
+	def on_closing(self):
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+
+		cursor.execute("DELETE FROM tasks")
+
+		for i in range(self.listWidget_tasks.count()):
+			item = self.listWidget_tasks.item(i)
+			if item.checkState() == QtCore.Qt.Checked:
+				cursor.execute("INSERT INTO tasks (task, done) VALUES (?, ?)", (item.text(), 1))
+			else:
+				cursor.execute("INSERT INTO tasks (task, done) VALUES (?, ?)", (item.text(), 0))
+		conn.commit()
+
+		conn.close()
+
+	def fill_tasks_from_db(self):
+		'''filling tasks from db to listWidget'''
+
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+
+		cursor.execute("SELECT * FROM tasks")
+		rows = cursor.fetchall()
+		for row in rows:
+			item = QtWidgets.QListWidgetItem(row[1])
+			if row[2] == 0:
+				item.setCheckState(QtCore.Qt.Unchecked)
+			else:
+				item.setCheckState(QtCore.Qt.Checked)
+			item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
+			self.listWidget_tasks.addItem(item)
+
+		conn.close()
 
 	def update_progress_bar(self):
 		'''Filling up the progress bar'''
+
 		checked_count = 0
 		for i in range(self.listWidget_tasks.count()):
 			item = self.listWidget_tasks.item(i)
@@ -82,20 +117,16 @@ class TimeQuest(QtWidgets.QMainWindow):
 	
 	def add_item_taskList(self, dialog, task_text):
 		'''Add new task to listWidget and close the dialog'''
+
 		if task_text == "":
 			return
 		else:
-			conn = connect('SQLite//main_db.db')
-			cursor = conn.cursor()
-			
-			cursor.execute("INSERT INTO tasks (task, done) VALUES (?, ?)", (task_text, 0))
-			conn.commit()
 			item = QtWidgets.QListWidgetItem(task_text)
 			item.setCheckState(QtCore.Qt.Unchecked)
+			item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
 			self.listWidget_tasks.addItem(item)
 
 			dialog.reject()
-			conn.close()
 			self.update_progress_bar()
 
 	def open_list_achievements(self):
