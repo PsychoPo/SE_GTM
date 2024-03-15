@@ -38,12 +38,13 @@ class TimeQuest(QtWidgets.QMainWindow):
 		
 		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
 		self.listWidget_tasks.itemChanged.connect(self.update_progress_bar)
-		# self.filling_task_from_db()
+		self.fill_task_from_db()
 		
 		self.progressBar_done_tasks = ui.findChild(QtWidgets.QProgressBar, "progressBar_done_tasks")
 		self.update_progress_bar()
 
-	# def 
+	def fill_task_from_db(self):
+		pass
 
 	def update_progress_bar(self):
 		'''Filling up the progress bar'''
@@ -84,7 +85,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 		if task_text == "":
 			return
 		else:
-			conn = connect('main_db.db')
+			conn = connect('SQLite//main_db.db')
 			cursor = conn.cursor()
 			
 			cursor.execute("INSERT INTO tasks (task, done) VALUES (?, ?)", (task_text, 0))
