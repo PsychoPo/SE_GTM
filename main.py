@@ -116,7 +116,27 @@ class TimeQuest(QtWidgets.QMainWindow):
 		pushButton_back = dialog_statistics.findChild(QtWidgets.QPushButton, "pushButton_back")
 		pushButton_back.clicked.connect(dialog_statistics.reject)
 
+		pushButton_restart_statistics = dialog_statistics.findChild(QtWidgets.QPushButton, "pushButton_restart_statistics")
+		pushButton_restart_statistics.clicked.connect(self.open_accept_restart_statistics)
+
 		dialog_statistics.exec()
+	
+	def open_accept_restart_statistics(self):
+		'''Open the dialog accepting restart statistics'''
+
+		ui_accept_restart_statistics = getcwd() + "/ui/accept_restart_statistics.ui"
+		loader = QtUiTools.QUiLoader()
+		ui_accept_restart_statistics = QtCore.QFile(ui_accept_restart_statistics)
+		ui_accept_restart_statistics.open(QtCore.QFile.ReadOnly)
+		dialog_accept_restart_statistics = loader.load(ui_accept_restart_statistics)
+		ui_accept_restart_statistics.close()
+
+		pushButton_no = dialog_accept_restart_statistics.findChild(QtWidgets.QPushButton, "pushButton_no")
+		pushButton_no.clicked.connect(dialog_accept_restart_statistics.reject)
+
+		pushButton_yes = dialog_accept_restart_statistics.findChild(QtWidgets.QPushButton, "pushButton_yes")
+
+		dialog_accept_restart_statistics.exec()
 
 	def open_choose_theme(self):
 		'''Open the dialog list of themes'''
