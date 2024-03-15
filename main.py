@@ -86,6 +86,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 			item.setCheckState(QtCore.Qt.Unchecked)
 			self.listWidget_tasks.addItem(item)
 			dialog.reject()
+			self.update_progress_bar()
 
 	def open_list_achievements(self):
 		'''Open the dialog list of achievements'''
