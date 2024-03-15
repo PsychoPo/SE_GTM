@@ -1,5 +1,6 @@
 from os import getcwd
 from PySide6 import QtWidgets, QtUiTools, QtCore, QtGui
+from datetime import datetime
 
 class MainWindow(QtWidgets.QMainWindow):
 	'''MainWindow class'''
@@ -28,7 +29,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
 		self.action_change_theme = ui.findChild(QtGui.QAction, "action_change_theme")
 		self.action_change_theme.triggered.connect(self.open_choose_theme)
-	
+
+		self.label_datetime = ui.findChild(QtWidgets.QLabel, "label_datetime")
+
+		self.timer = QtCore.QTimer(self)
+		self.timer.timeout.connect(lambda: self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+		self.timer.start(1000)
+
+		self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
 	def open_create_task(self):
 		'''Open the dialog creation task to add a new task'''
 
@@ -42,10 +51,11 @@ class MainWindow(QtWidgets.QMainWindow):
 		ui_create_task.close()
 
 		textEdit_task_text = dialog_create_task.findChild(QtWidgets.QTextEdit, "textEdit_task_text")
-		pushButton_create = dialog_create_task.findChild(QtWidgets.QPushButton, "pushButton_create")
-		pushButton_cancel = dialog_create_task.findChild(QtWidgets.QPushButton, "pushButton_cancel")
 
-		pushButton_create.clicked.connect(lambda: self.add_item_taskList(dialog_create_task, textEdit_task_text.toPlainText())) #self.add_item_taskList(dialog_create_task, "12312") #
+		pushButton_create = dialog_create_task.findChild(QtWidgets.QPushButton, "pushButton_create")
+		pushButton_create.clicked.connect(lambda: self.add_item_taskList(dialog_create_task, textEdit_task_text.toPlainText()))
+
+		pushButton_cancel = dialog_create_task.findChild(QtWidgets.QPushButton, "pushButton_cancel")
 		pushButton_cancel.clicked.connect(dialog_create_task.reject)
 
 		dialog_create_task.exec()
@@ -69,6 +79,9 @@ class MainWindow(QtWidgets.QMainWindow):
 		dialog_list_achievements = loader.load(ui_list_achievements)
 		ui_list_achievements.close()
 
+		pushButton_back = dialog_list_achievements.findChild(QtWidgets.QPushButton, "pushButton_back")
+		pushButton_back.clicked.connect(dialog_list_achievements.reject)
+
 		dialog_list_achievements.exec()
 
 	def open_statistics(self):
@@ -81,6 +94,9 @@ class MainWindow(QtWidgets.QMainWindow):
 		dialog_statistics = loader.load(ui_statistics)
 		ui_statistics.close()
 
+		pushButton_back = dialog_statistics.findChild(QtWidgets.QPushButton, "pushButton_back")
+		pushButton_back.clicked.connect(dialog_statistics.reject)
+
 		dialog_statistics.exec()
 
 	def open_choose_theme(self):
@@ -92,6 +108,9 @@ class MainWindow(QtWidgets.QMainWindow):
 		ui_choose_theme.open(QtCore.QFile.ReadOnly)
 		dialog_choose_theme = loader.load(ui_choose_theme)
 		ui_choose_theme.close()
+
+		pushButton_back = dialog_choose_theme.findChild(QtWidgets.QPushButton, "pushButton_back")
+		pushButton_back.clicked.connect(dialog_choose_theme.reject)
 
 		dialog_choose_theme.exec()
 
