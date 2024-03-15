@@ -16,8 +16,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 		self.setCentralWidget(ui)
 
-		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
-
 		self.action_add_task = ui.findChild(QtGui.QAction, "action_add_task")
 		self.action_add_task.triggered.connect(self.open_create_task)
 
@@ -31,12 +29,30 @@ class MainWindow(QtWidgets.QMainWindow):
 		self.action_change_theme.triggered.connect(self.open_choose_theme)
 
 		self.label_datetime = ui.findChild(QtWidgets.QLabel, "label_datetime")
-
 		self.timer = QtCore.QTimer(self)
 		self.timer.timeout.connect(lambda: self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 		self.timer.start(1000)
-
 		self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+		self.label_timecoins = ui.findChild(QtWidgets.QLabel, "label_timecoins")
+		
+		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
+		self.listWidget_tasks.itemChanged.connect(self.update_progress_bar)
+		
+		self.progressBar_done_tasks = ui.findChild(QtWidgets.QProgressBar, "progressBar_done_tasks")
+		self.update_progress_bar()
+
+	def update_progress_bar(self):
+		'''Filling up the progress bar'''
+		checked_count = 0
+		for i in range(self.listWidget_tasks.count()):
+			item = self.listWidget_tasks.item(i)
+			if item.checkState() == QtCore.Qt.Checked:
+				checked_count += 1
+		
+		max_value = self.listWidget_tasks.count()
+		self.progressBar_done_tasks.setMaximum(max_value)
+		self.progressBar_done_tasks.setValue(checked_count)
 
 	def open_create_task(self):
 		'''Open the dialog creation task to add a new task'''
@@ -61,6 +77,7 @@ class MainWindow(QtWidgets.QMainWindow):
 		dialog_create_task.exec()
 	
 	def add_item_taskList(self, dialog, task_text):
+		'''Add new task to listWidget and close the dialog'''
 		if task_text == "":
 			return
 		else:
