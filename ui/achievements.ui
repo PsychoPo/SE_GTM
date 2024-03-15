@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
-    <height>310</height>
+    <width>623</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,7 @@ border: none;</string>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_lists">
      <item>
-      <widget class="QListView" name="listView_not_done">
+      <widget class="QListWidget" name="listWidget_not_done">
        <property name="styleSheet">
         <string notr="true">QListView {
 font-weight: bold;
@@ -66,14 +66,14 @@ border-radius: 7px;
 
 QListView::item:selected {
 border: none;
-color: rgba(255, 255, 255);
+color: rgb(255, 255, 255);
 background-color: rgba(255, 255, 255, 50);
 }</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QListView" name="listView_done">
+      <widget class="QListWidget" name="listWidget_done">
        <property name="styleSheet">
         <string notr="true">QListView {
 font-weight: bold;
@@ -85,7 +85,7 @@ border-radius: 7px;
 
 QListView::item:selected {
 border: none;
-color: rgba(255, 255, 255);
+color: rgb(255, 255, 255);
 background-color: rgba(255, 255, 255, 50);
 }</string>
        </property>
