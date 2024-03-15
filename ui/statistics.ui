@@ -43,7 +43,7 @@ background-color: none;
 </string>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -88,7 +88,7 @@ background-color: none;
 border: none;</string>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -133,7 +133,7 @@ background-color: none;
 border: none;</string>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -178,7 +178,7 @@ background-color: none;
 border: none;</string>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>0</string>
        </property>
       </widget>
      </item>

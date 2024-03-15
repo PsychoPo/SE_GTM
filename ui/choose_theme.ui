@@ -51,16 +51,6 @@ color: rgb(255, 255, 255);
 background-color: rgba(255, 255, 255, 50);
 }</string>
      </property>
-     <item>
-      <property name="text">
-       <string>Theme_1</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Theme_2</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>
