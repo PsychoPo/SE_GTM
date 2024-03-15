@@ -142,7 +142,29 @@ class TimeQuest(QtWidgets.QMainWindow):
 		pushButton_back = dialog_list_achievements.findChild(QtWidgets.QPushButton, "pushButton_back")
 		pushButton_back.clicked.connect(dialog_list_achievements.reject)
 
+		listWidget_not_done = dialog_list_achievements.findChild(QtWidgets.QListWidget, "listWidget_not_done")
+		listWidget_done = dialog_list_achievements.findChild(QtWidgets.QListWidget, "listWidget_done")
+
+		self.fill_achievements_from_db(listWidget_not_done, listWidget_done)
+
 		dialog_list_achievements.exec()
+
+	def fill_achievements_from_db(self, listWidget_not_done, listWidget_done):
+		'''filling achievements from db to listWidgets'''
+
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+
+		cursor.execute("SELECT * FROM achievements")
+		rows = cursor.fetchall()
+		for row in rows:
+			item = QtWidgets.QListWidgetItem(row[1])
+			if row[2] == 0:
+				listWidget_not_done.addItem(item)
+			else:
+				listWidget_done.addItem(item)
+
+		conn.close()
 
 	def open_statistics(self):
 		'''Open the dialog of statistics'''
