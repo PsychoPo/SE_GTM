@@ -162,7 +162,7 @@ border-radius: 7px;
 
 QListView::item:selected {
 border: none;
-color: rgba(255, 255, 255);
+color: rgb(255, 255, 255);
 background-color: rgba(255, 255, 255, 50);
 }</string>
           </property>
