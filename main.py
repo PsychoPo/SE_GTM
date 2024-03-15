@@ -2,6 +2,7 @@ from os import getcwd
 from PySide6 import QtWidgets, QtUiTools, QtCore, QtGui
 from datetime import datetime
 import res.res_rc
+from sqlite3 import connect, Cursor
 
 class TimeQuest(QtWidgets.QMainWindow):
 	'''MainWindow class'''
@@ -34,14 +35,15 @@ class TimeQuest(QtWidgets.QMainWindow):
 		self.timer.timeout.connect(lambda: self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 		self.timer.start(1000)
 		self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-
-		self.label_timecoins = ui.findChild(QtWidgets.QLabel, "label_timecoins")
 		
 		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
 		self.listWidget_tasks.itemChanged.connect(self.update_progress_bar)
+		# self.filling_task_from_db()
 		
 		self.progressBar_done_tasks = ui.findChild(QtWidgets.QProgressBar, "progressBar_done_tasks")
 		self.update_progress_bar()
+
+	# def 
 
 	def update_progress_bar(self):
 		'''Filling up the progress bar'''
@@ -82,10 +84,17 @@ class TimeQuest(QtWidgets.QMainWindow):
 		if task_text == "":
 			return
 		else:
+			conn = connect('main_db.db')
+			cursor = conn.cursor()
+			
+			cursor.execute("INSERT INTO tasks (task, done) VALUES (?, ?)", (task_text, 0))
+			conn.commit()
 			item = QtWidgets.QListWidgetItem(task_text)
 			item.setCheckState(QtCore.Qt.Unchecked)
 			self.listWidget_tasks.addItem(item)
+
 			dialog.reject()
+			conn.close()
 			self.update_progress_bar()
 
 	def open_list_achievements(self):
