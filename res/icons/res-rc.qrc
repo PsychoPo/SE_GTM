@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="icons">
-    <file>coins.svg</file>
     <file>time.svg</file>
   </qresource>
 </RCC>

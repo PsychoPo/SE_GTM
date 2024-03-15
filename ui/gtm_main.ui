@@ -46,7 +46,7 @@ font-family: Liberation Serif;</string>
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_top" stretch="0,0,0,0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout_top" stretch="0,0,0">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -70,44 +70,6 @@ font-family: Liberation Serif;</string>
          </spacer>
         </item>
         <item>
-         <widget class="QLabel" name="label_icon_timecoins">
-          <property name="maximumSize">
-           <size>
-            <width>23</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font-weight: bold; 
-font-size: 20pt;
-background-color: none;
-border: none;</string>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../icons/res-rc.qrc">:/icons/coins.svg</pixmap>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_timecoins">
-          <property name="maximumSize">
-           <size>
-            <width>115</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font-weight: bold;
-font-size: 20pt;
-background-color: none;
-border: none;</string>
-          </property>
-          <property name="text">
-           <string>TimeCoins</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QLabel" name="label_icon_datetime">
           <property name="maximumSize">
            <size>
@@ -122,7 +84,7 @@ background-color: none;
 border: none;</string>
           </property>
           <property name="pixmap">
-           <pixmap resource="../icons/res-rc.qrc">:/icons/time.svg</pixmap>
+           <pixmap resource="../res/icons/res-rc.qrc">:/icons/time.svg</pixmap>
           </property>
          </widget>
         </item>
@@ -274,7 +236,7 @@ text-align: center;</string>
   <tabstop>listWidget_tasks</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/res-rc.qrc"/>
+  <include location="../res/icons/res-rc.qrc"/>
  </resources>
  <connections/>
 </ui>
