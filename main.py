@@ -4,6 +4,9 @@ from datetime import datetime
 import res.res_rc
 from sqlite3 import connect, Cursor
 
+# TODO начать с статистики(входы по дням)
+# TODO сделать темы и в меню настроить выбор темы
+
 class TimeQuest(QtWidgets.QMainWindow):
 	'''MainWindow class'''
 	def __init__(self):
@@ -17,6 +20,22 @@ class TimeQuest(QtWidgets.QMainWindow):
 		ui_file.open(QtCore.QFile.ReadOnly)
 		ui = loader.load(ui_file)
 		ui_file.close()
+
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+		cursor.execute("UPDATE statistics SET logons = logons + 1")
+
+		cursor.execute("SELECT * FROM statistics")
+		row = cursor.fetchone()
+		if row[0] >= 50:
+			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 7")
+		if row[0] >= 100:
+			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 8 ")
+		if row[0] >= 150:
+			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 9 ")
+
+		conn.commit()
+		conn.close()
 
 		self.setCentralWidget(ui)
 
@@ -40,6 +59,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 		
 		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
 		self.listWidget_tasks.itemChanged.connect(self.update_progress_bar)
+		self.listWidget_tasks.itemChanged.connect(self.count_logons)
 		self.fill_tasks_from_db()
 		
 		self.progressBar_done_tasks = ui.findChild(QtWidgets.QProgressBar, "progressBar_done_tasks")
@@ -94,6 +114,25 @@ class TimeQuest(QtWidgets.QMainWindow):
 		max_value = self.listWidget_tasks.count()
 		self.progressBar_done_tasks.setMaximum(max_value)
 		self.progressBar_done_tasks.setValue(checked_count)
+
+	def count_logons(self):
+		'''counting logons'''
+
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+		cursor.execute("UPDATE statistics SET done_tasks = done_tasks + 1")
+
+		cursor.execute("SELECT * FROM statistics")
+		row = cursor.fetchone()
+		if row[1] >= 5:
+			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 1")
+		if row[1] >= 10:
+			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 2 ")
+		if row[1] >= 15:
+			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 3 ")
+
+		conn.commit()
+		conn.close()
 
 	def open_create_task(self):
 		'''Open the dialog creation task to add a new task'''
@@ -155,6 +194,10 @@ class TimeQuest(QtWidgets.QMainWindow):
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
 
+		if cursor.execute("SELECT COUNT(*) FROM achievements WHERE done = 1").fetchone()[0] == 9:
+			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 10")
+			conn.commit()
+
 		cursor.execute("SELECT * FROM achievements")
 		rows = cursor.fetchall()
 		for row in rows:
@@ -180,11 +223,31 @@ class TimeQuest(QtWidgets.QMainWindow):
 		pushButton_back.clicked.connect(dialog_statistics.reject)
 
 		pushButton_restart_statistics = dialog_statistics.findChild(QtWidgets.QPushButton, "pushButton_restart_statistics")
-		pushButton_restart_statistics.clicked.connect(self.open_accept_restart_statistics)
+		pushButton_restart_statistics.clicked.connect(lambda: self.open_accept_restart_statistics(dialog_statistics))
 
+		label_count_visits = dialog_statistics.findChild(QtWidgets.QLabel, "label_count_visits")
+		label_count_tasks = dialog_statistics.findChild(QtWidgets.QLabel, "label_count_tasks")
+		label_count_achievements = dialog_statistics.findChild(QtWidgets.QLabel, "label_count_achievements")
+		label_count_themes = dialog_statistics.findChild(QtWidgets.QLabel, "label_count_themes")
+
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+		
+		cursor.execute("UPDATE statistics SET get_achievements = ?", str(cursor.execute("SELECT COUNT(*) FROM achievements WHERE done = 1").fetchone()[0]))
+		conn.commit()
+
+		cursor.execute("SELECT * FROM statistics")
+		row = cursor.fetchone()
+
+		label_count_visits.setText(str(row[0]))
+		label_count_tasks.setText(str(row[1]))
+		label_count_achievements.setText(str(row[2]))
+		label_count_themes.setText(str(row[3]))
+
+		conn.close()
 		dialog_statistics.exec()
 	
-	def open_accept_restart_statistics(self):
+	def open_accept_restart_statistics(self, dialog):
 		'''Open the dialog accepting restart statistics'''
 
 		ui_accept_restart_statistics = getcwd() + "/ui/accept_restart_statistics.ui"
@@ -198,8 +261,20 @@ class TimeQuest(QtWidgets.QMainWindow):
 		pushButton_no.clicked.connect(dialog_accept_restart_statistics.reject)
 
 		pushButton_yes = dialog_accept_restart_statistics.findChild(QtWidgets.QPushButton, "pushButton_yes")
+		pushButton_yes.clicked.connect(lambda: self.restart_statistics(dialog_accept_restart_statistics, dialog))
 
 		dialog_accept_restart_statistics.exec()
+	
+	def restart_statistics(self, dialog, dialog_stats):
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+		cursor.execute(" UPDATE statistics SET logons = 0, done_tasks = 0, get_achievements = 0, get_themes = 0 ")
+		cursor.execute(" UPDATE achievements SET done = 0 WHERE done = 1 ")
+		conn.commit()
+		conn.close()
+
+		dialog.reject()
+		dialog_stats.reject()
 
 	def open_choose_theme(self):
 		'''Open the dialog list of themes'''
