@@ -193,6 +193,7 @@ text-align: center;</string>
      <string>Задачи</string>
     </property>
     <addaction name="action_add_task"/>
+    <addaction name="action_delete_task"/>
    </widget>
    <widget class="QMenu" name="menu_statistic">
     <property name="title">
@@ -235,6 +236,11 @@ text-align: center;</string>
   <action name="action_change_theme">
    <property name="text">
     <string>Сменить тему приложения</string>
+   </property>
+  </action>
+  <action name="action_delete_task">
+   <property name="text">
+    <string>Удалить задачу</string>
    </property>
   </action>
  </widget>
