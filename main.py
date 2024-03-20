@@ -42,6 +42,9 @@ class TimeQuest(QtWidgets.QMainWindow):
 		self.action_add_task = ui.findChild(QtGui.QAction, "action_add_task")
 		self.action_add_task.triggered.connect(self.open_create_task)
 
+		self.action_add_task = ui.findChild(QtGui.QAction, "action_delete_task")
+		self.action_add_task.triggered.connect(self.delete_task)
+
 		self.action_list_achievements = ui.findChild(QtGui.QAction, "action_list_achievements")
 		self.action_list_achievements.triggered.connect(self.open_list_achievements)
 
@@ -56,7 +59,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 		self.timer.timeout.connect(lambda: self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 		self.timer.start(1000)
 		self.label_datetime.setText(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-		
+
 		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
 		self.listWidget_tasks.itemChanged.connect(self.update_progress_bar)
 		self.listWidget_tasks.itemChanged.connect(self.count_logons)
@@ -82,6 +85,12 @@ class TimeQuest(QtWidgets.QMainWindow):
 		conn.commit()
 
 		conn.close()
+
+	def delete_task(self):
+		item = self.listWidget_tasks.currentItem()
+		if item:
+			row = self.listWidget_tasks.row(item)
+			self.listWidget_tasks.takeItem(row)
 
 	def fill_tasks_from_db(self):
 		'''filling tasks from db to listWidget'''
