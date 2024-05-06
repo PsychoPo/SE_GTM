@@ -4,15 +4,12 @@ from datetime import datetime
 import res.res_rc
 from sqlite3 import connect, Cursor
 
-# TODO начать с статистики(входы по дням)
 # TODO сделать темы и в меню настроить выбор темы
 
 class TimeQuest(QtWidgets.QMainWindow):
 	'''MainWindow class'''
 	def __init__(self):
 		super().__init__()
-
-		# TODO !!! Сделать удаление item!
 
 		ui_file = getcwd() + "/ui/gtm_main.ui"
 		loader = QtUiTools.QUiLoader()
@@ -68,6 +65,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 		self.progressBar_done_tasks = ui.findChild(QtWidgets.QProgressBar, "progressBar_done_tasks")
 		self.update_progress_bar()
 
+		self.todayis()
+
 		QtCore.QCoreApplication.instance().aboutToQuit.connect(self.on_closing)
 
 	def on_closing(self):
@@ -109,6 +108,34 @@ class TimeQuest(QtWidgets.QMainWindow):
 			item.setFlags(item.flags() | QtCore.Qt.ItemIsEditable)
 			self.listWidget_tasks.addItem(item)
 
+		conn.close()
+
+	def todayis(self):
+		'''set today is "day" && set achievements'''
+
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+
+		cursor.execute("SELECT todayis FROM statistics")
+		todayis = cursor.fetchone()
+		if todayis[0] == datetime.now().day:
+			pass
+		if todayis[0] + 1 == datetime.now().day:
+			cursor.execute("UPDATE statistics SET todayis = ?", (str(datetime.now().day),))
+			cursor.execute("UPDATE statistics SET count_everyday_logons = count_everyday_logons + 1")
+			cursor.execute("SELECT count_everyday_logons FROM statistics")
+			count_everyday_logons = cursor.fetchone()
+			if count_everyday_logons[0] >= 5:
+				cursor.execute("UPDATE achievements SET done = 1 WHERE id = 4")
+			if count_everyday_logons[0] >= 10:
+				cursor.execute("UPDATE achievements SET done = 1 WHERE id = 5")
+			if count_everyday_logons[0] >= 15:
+				cursor.execute("UPDATE achievements SET done = 1 WHERE id = 6")
+		else:
+			cursor.execute("UPDATE statistics SET todayis = ?", (str(datetime.now().day),))
+			cursor.execute("UPDATE statistics SET count_everyday_logons = 0")
+
+		conn.commit()
 		conn.close()
 
 	def update_progress_bar(self):
