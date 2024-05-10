@@ -68,7 +68,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 
 		self.listWidget_tasks = ui.findChild(QtWidgets.QListWidget, "listWidget_tasks")
 		self.listWidget_tasks.itemChanged.connect(self.update_progress_bar)
-		self.listWidget_tasks.itemChanged.connect(self.count_logons)
+		self.listWidget_tasks.itemChanged.connect(self.count_done_tasks)
 		self.fill_tasks_from_db()
 		
 		self.progressBar_done_tasks = ui.findChild(QtWidgets.QProgressBar, "progressBar_done_tasks")
@@ -76,11 +76,10 @@ class TimeQuest(QtWidgets.QMainWindow):
 
 		self.todayis()
 
-		# self.load_themes() # TODO функцию проверки и загрузки тем
-
 		QtCore.QCoreApplication.instance().aboutToQuit.connect(self.on_closing)
 
 	def on_closing(self):
+		'''Saving data on closing the app'''
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
 
@@ -96,14 +95,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 
 		conn.close()
 
-	def delete_task(self):
-		item = self.listWidget_tasks.currentItem()
-		if item:
-			row = self.listWidget_tasks.row(item)
-			self.listWidget_tasks.takeItem(row)
-
 	def fill_tasks_from_db(self):
-		'''filling tasks from db to listWidget'''
+		'''Filling tasks from db to listWidget'''
 
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
@@ -122,7 +115,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 		conn.close()
 
 	def todayis(self):
-		'''set today is "day" && set achievements'''
+		'''Set today is "day" && set achievements'''
 
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
@@ -162,8 +155,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 		self.progressBar_done_tasks.setMaximum(max_value)
 		self.progressBar_done_tasks.setValue(checked_count)
 
-	def count_logons(self):
-		'''counting logons'''
+	def count_done_tasks(self):
+		'''Counting done tasks and set achievements if true'''
 
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
@@ -214,6 +207,13 @@ class TimeQuest(QtWidgets.QMainWindow):
 			dialog.reject()
 			self.update_progress_bar()
 
+	def delete_task(self):
+		'''Deleting task'''
+		item = self.listWidget_tasks.currentItem()
+		if item:
+			row = self.listWidget_tasks.row(item)
+			self.listWidget_tasks.takeItem(row)
+
 	def open_list_achievements(self):
 		'''Open the dialog list of achievements'''
 
@@ -234,7 +234,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 		dialog_list_achievements.exec()
 
 	def fill_achievements_from_db(self, listWidget_not_done, listWidget_done):
-		'''filling achievements from db to listWidgets'''
+		'''Filling achievements from db to listWidgets'''
 
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
@@ -309,6 +309,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 		dialog_accept_restart_statistics.exec()
 	
 	def restart_statistics(self, dialog, dialog_stats):
+		'''Restart statistics from db'''
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
 		cursor.execute(" UPDATE statistics SET logons = 0, done_tasks = 0, get_achievements = 0, get_themes = 0 ")
@@ -331,7 +332,26 @@ class TimeQuest(QtWidgets.QMainWindow):
 		pushButton_back = dialog_choose_theme.findChild(QtWidgets.QPushButton, "pushButton_back")
 		pushButton_back.clicked.connect(dialog_choose_theme.reject)
 
+		listWidget_list_of_themes = dialog_choose_theme.findChild(QtWidgets.QListWidget, "listWidget_list_of_themes")
+
+		self.load_themes(listWidget_list_of_themes)
+
 		dialog_choose_theme.exec()
+
+	def load_themes(self, listWidget_list_of_themes):
+		'''Loading themes from bd'''
+
+		conn = connect('SQLite//main_db.db')
+		cursor = conn.cursor()
+
+		cursor.execute("SELECT name FROM themes WHERE available = 1")
+		names = cursor.fetchall()
+		for name in names:
+			item = QtWidgets.QListWidgetItem(name[0])
+			listWidget_list_of_themes.addItem(item)
+
+		conn.close()
+		pass
 
 def main():
     app = QtWidgets.QApplication([])
