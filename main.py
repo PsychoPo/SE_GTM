@@ -11,20 +11,6 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def __init__(self):
 		super().__init__()
 
-		# TODO сделать таблицу тем и колонку пути к ним и продумать как запоминать тему(id or колонка using)
-		self.path_create_task = getcwd() + "/ui/ocean/create_task.ui"
-		self.path_list_achievements = getcwd() + "/ui/ocean/achievements.ui"
-		self.path_statistics = getcwd() + "/ui/ocean/statistics.ui"
-		self.path_accept_restart_statistics = getcwd() + "/ui/ocean/accept_restart_statistics.ui"
-		self.path_choose_theme = getcwd() + "/ui/ocean/choose_theme.ui"
-		self.path_main = getcwd() + "/ui/ocean/gtm_main.ui"
-		
-		loader = QtUiTools.QUiLoader()
-		ui_file = QtCore.QFile(self.path_main)
-		ui_file.open(QtCore.QFile.ReadOnly)
-		ui = loader.load(ui_file)
-		ui_file.close()
-
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
 		cursor.execute("UPDATE statistics SET logons = logons + 1")
@@ -38,8 +24,24 @@ class TimeQuest(QtWidgets.QMainWindow):
 		if row[0] >= 150:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 9 ")
 
+		cursor.execute("SELECT path FROM themes WHERE used = 1")
+		self.path_theme = cursor.fetchone()
+
 		conn.commit()
 		conn.close()
+
+		self.path_create_task = getcwd() + self.path_theme[0] + "create_task.ui"
+		self.path_list_achievements = getcwd() + self.path_theme[0] + "achievements.ui"
+		self.path_statistics = getcwd() + self.path_theme[0] + "statistics.ui"
+		self.path_accept_restart_statistics = getcwd() + self.path_theme[0] + "accept_restart_statistics.ui"
+		self.path_choose_theme = getcwd() + self.path_theme[0] + "choose_theme.ui"
+		self.path_main = getcwd() + self.path_theme[0] + "gtm_main.ui"
+		
+		loader = QtUiTools.QUiLoader()
+		ui_file = QtCore.QFile(self.path_main)
+		ui_file.open(QtCore.QFile.ReadOnly)
+		ui = loader.load(ui_file)
+		ui_file.close()
 
 		self.setCentralWidget(ui)
 
