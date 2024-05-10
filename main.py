@@ -11,9 +11,16 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def __init__(self):
 		super().__init__()
 
-		ui_file = getcwd() + "/ui/gtm_main.ui"
+		# TODO сделать таблицу тем и колонку пути к ним и продумать как запоминать тему(id or колонка using)
+		self.path_create_task = getcwd() + "/ui/ocean/create_task.ui"
+		self.path_list_achievements = getcwd() + "/ui/ocean/achievements.ui"
+		self.path_statistics = getcwd() + "/ui/ocean/statistics.ui"
+		self.path_accept_restart_statistics = getcwd() + "/ui/ocean/accept_restart_statistics.ui"
+		self.path_choose_theme = getcwd() + "/ui/ocean/choose_theme.ui"
+		self.path_main = getcwd() + "/ui/ocean/gtm_main.ui"
+		
 		loader = QtUiTools.QUiLoader()
-		ui_file = QtCore.QFile(ui_file)
+		ui_file = QtCore.QFile(self.path_main)
 		ui_file.open(QtCore.QFile.ReadOnly)
 		ui = loader.load(ui_file)
 		ui_file.close()
@@ -66,6 +73,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 		self.update_progress_bar()
 
 		self.todayis()
+
+		# self.load_themes() # TODO функцию проверки и загрузки тем
 
 		QtCore.QCoreApplication.instance().aboutToQuit.connect(self.on_closing)
 
@@ -173,9 +182,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def open_create_task(self):
 		'''Open the dialog creation task to add a new task'''
 
-		ui_create_task = getcwd() + "/ui/create_task.ui"
 		loader = QtUiTools.QUiLoader()
-		ui_create_task = QtCore.QFile(ui_create_task)
+		ui_create_task = QtCore.QFile(self.path_create_task)
 		ui_create_task.open(QtCore.QFile.ReadOnly)
 		dialog_create_task = loader.load(ui_create_task)
 		ui_create_task.close()
@@ -207,9 +215,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def open_list_achievements(self):
 		'''Open the dialog list of achievements'''
 
-		ui_list_achievements = getcwd() + "/ui/achievements.ui"
 		loader = QtUiTools.QUiLoader()
-		ui_list_achievements = QtCore.QFile(ui_list_achievements)
+		ui_list_achievements = QtCore.QFile(self.path_list_achievements)
 		ui_list_achievements.open(QtCore.QFile.ReadOnly)
 		dialog_list_achievements = loader.load(ui_list_achievements)
 		ui_list_achievements.close()
@@ -248,9 +255,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def open_statistics(self):
 		'''Open the dialog of statistics'''
 
-		ui_statistics = getcwd() + "/ui/statistics.ui"
 		loader = QtUiTools.QUiLoader()
-		ui_statistics = QtCore.QFile(ui_statistics)
+		ui_statistics = QtCore.QFile(self.path_statistics)
 		ui_statistics.open(QtCore.QFile.ReadOnly)
 		dialog_statistics = loader.load(ui_statistics)
 		ui_statistics.close()
@@ -286,9 +292,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def open_accept_restart_statistics(self, dialog):
 		'''Open the dialog accepting restart statistics'''
 
-		ui_accept_restart_statistics = getcwd() + "/ui/accept_restart_statistics.ui"
 		loader = QtUiTools.QUiLoader()
-		ui_accept_restart_statistics = QtCore.QFile(ui_accept_restart_statistics)
+		ui_accept_restart_statistics = QtCore.QFile(self.path_accept_restart_statistics)
 		ui_accept_restart_statistics.open(QtCore.QFile.ReadOnly)
 		dialog_accept_restart_statistics = loader.load(ui_accept_restart_statistics)
 		ui_accept_restart_statistics.close()
@@ -315,9 +320,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 	def open_choose_theme(self):
 		'''Open the dialog list of themes'''
 
-		ui_choose_theme = getcwd() + "/ui/choose_theme.ui"
 		loader = QtUiTools.QUiLoader()
-		ui_choose_theme = QtCore.QFile(ui_choose_theme)
+		ui_choose_theme = QtCore.QFile(self.path_choose_theme)
 		ui_choose_theme.open(QtCore.QFile.ReadOnly)
 		dialog_choose_theme = loader.load(ui_choose_theme)
 		ui_choose_theme.close()
