@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_list_achievements</class>
+ <widget class="QDialog" name="Dialog_list_achievements">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>623</width>
+    <height>468</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Достижения</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:1, y1:1, x2:0, y2:0, stop:0 rgba(81, 150, 135, 255), stop:0.427447 rgba(41, 150, 132, 235), stop:1 rgba(155, 150, 165, 255));
+font-family: Liberation Serif;
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_labels">
+     <item>
+      <widget class="QLabel" name="label_not_done">
+       <property name="styleSheet">
+        <string notr="true">text-align: center;
+font-weight: bold;
+font-size: 20pt;
+background-color: none;
+border: none;</string>
+       </property>
+       <property name="text">
+        <string>Не выполнены</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_done">
+       <property name="styleSheet">
+        <string notr="true">text-align: center;
+font-weight: bold;
+font-size: 20pt;
+background-color: none;
+border: none;</string>
+       </property>
+       <property name="text">
+        <string>Выполнены</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_lists">
+     <item>
+      <widget class="QListWidget" name="listWidget_not_done">
+       <property name="styleSheet">
+        <string notr="true">QListView {
+font-weight: bold;
+font-size: 20pt;
+background-color: rgba(255, 255, 255, 30);
+border: 1px solid rgba(255, 255, 255, 40);
+border-radius: 7px;
+}
+
+QListView::item:selected {
+border: none;
+color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 50);
+}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="listWidget_done">
+       <property name="styleSheet">
+        <string notr="true">QListView {
+font-weight: bold;
+font-size: 20pt;
+background-color: rgba(255, 255, 255, 30);
+border: 1px solid rgba(255, 255, 255, 40);
+border-radius: 7px;
+}
+
+QListView::item:selected {
+border: none;
+color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 50);
+}</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton_back">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+font-weight: bold;
+font-size: 20pt;
+text-align: center;
+background-color: rgba(255, 255, 255, 30);
+border: 1px solid rgba(255, 255, 255, 40);
+border-radius: 7px;
+}
+
+QPushButton:hover {
+background-color: rgba(255, 255, 255, 40);
+}
+QPushButton:pressed {
+background-color: rgba(255, 255, 255, 70);
+}</string>
+     </property>
+     <property name="text">
+      <string>Назад</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
