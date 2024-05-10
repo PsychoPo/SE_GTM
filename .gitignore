@@ -9,3 +9,6 @@ venv.bak/
 
 # DS_Store (MacOS Finder)
 *.DS_Store
+
+# SQLite sql
+*.sql
