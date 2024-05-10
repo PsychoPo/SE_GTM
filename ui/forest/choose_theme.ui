@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_choose_theme</class>
+ <widget class="QDialog" name="Dialog_choose_theme">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>354</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Темы приложения</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: qlineargradient(spread:pad, x1:1, y1:1, x2:0, y2:0, stop:0 rgba(87, 140, 62, 255), stop:0.427447 rgba(54, 87, 39, 235), stop:1 rgba(62, 140, 63, 255));
+font-family: Liberation Serif;</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_choose_theme">
+     <property name="styleSheet">
+      <string notr="true">text-align: center;
+font-weight: bold;
+font-size: 20pt;
+background-color: none;</string>
+     </property>
+     <property name="text">
+      <string>Выберите тему вашего приложения:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QListWidget" name="listWidget_list_of_themes">
+     <property name="styleSheet">
+      <string notr="true">QListView {
+font-weight: bold;
+font-size: 20pt;
+background-color: rgba(255, 255, 255, 30);
+border: 1px solid rgba(255, 255, 255, 40);
+border-radius: 7px;
+}
+
+QListView::item:selected {
+border: none;
+color: rgb(255, 255, 255);
+background-color: rgba(255, 255, 255, 50);
+}</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="pushButton_back">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+font-weight: bold;
+font-size: 20pt;
+text-align: center;
+background-color: rgba(255, 255, 255, 30);
+border: 1px solid rgba(255, 255, 255, 40);
+border-radius: 7px;
+}
+
+QPushButton:hover {
+background-color: rgba(255, 255, 255, 40);
+}
+QPushButton:pressed {
+background-color: rgba(255, 255, 255, 70);
+}</string>
+     </property>
+     <property name="text">
+      <string>Назад</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
