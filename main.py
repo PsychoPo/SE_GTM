@@ -1,10 +1,11 @@
-from os import getcwd
+from os import getcwd, execl
+from sys import executable, argv
 from PySide6 import QtWidgets, QtUiTools, QtCore, QtGui
 from datetime import datetime
 import res.res_rc
 from sqlite3 import connect, Cursor
 
-# TODO сброс ачивок и тем && выбор темы и ее смена
+# TODO выбор темы и ее смена
 
 class TimeQuest(QtWidgets.QMainWindow):
 	'''MainWindow class'''
@@ -355,6 +356,8 @@ class TimeQuest(QtWidgets.QMainWindow):
 
 		self.load_themes(listWidget_list_of_themes)
 
+		listWidget_list_of_themes.itemActivated.connect(self.theme_activated)
+
 		dialog_choose_theme.exec()
 
 	def load_themes(self, listWidget_list_of_themes):
@@ -370,7 +373,30 @@ class TimeQuest(QtWidgets.QMainWindow):
 			listWidget_list_of_themes.addItem(item)
 
 		conn.close()
-		pass
+	
+	def reload_app(self):
+		'''Reloading app'''
+		QtWidgets.QApplication.quit()
+		execl(executable, executable, *argv)
+
+	def theme_activated(self, item):
+		'''Signal to change theme in db'''
+		msg_box_yesno = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Question,
+                                    "Вопрос",
+                                    "Вы действительно хотите выполнить это действие? Будет выполнена перезагрузка приложения!",
+                                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+		ret = msg_box_yesno.exec()
+		if (ret == QtWidgets.QMessageBox.Yes):
+			conn = connect('SQLite//main_db.db')
+			cursor = conn.cursor()
+
+			cursor.execute("UPDATE themes SET used = 0 WHERE used = 1")
+			cursor.execute("UPDATE themes SET used = 1 WHERE name = ?", (item.text(), ))
+			conn.commit()
+
+			self.reload_app()
+
+			conn.close()
 
 def main():
     app = QtWidgets.QApplication([])
