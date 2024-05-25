@@ -4,7 +4,7 @@ from datetime import datetime
 import res.res_rc
 from sqlite3 import connect, Cursor
 
-# TODO сделать зависимость ачивок и тем && сброс ачивок и тем && выбор темы и ее смена
+# TODO сброс ачивок и тем && выбор темы и ее смена
 
 class TimeQuest(QtWidgets.QMainWindow):
 	'''MainWindow class'''
@@ -327,8 +327,12 @@ class TimeQuest(QtWidgets.QMainWindow):
 		'''Restart statistics from db'''
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
-		cursor.execute(" UPDATE statistics SET logons = 0, done_tasks = 0, get_achievements = 0, get_themes = 0 ")
+		cursor.execute(" UPDATE statistics SET logons = 0, done_tasks = 0, get_achievements = 0, get_themes = 0, todayis = 0, count_everyday_logons = 0 ")
 		cursor.execute(" UPDATE achievements SET done = 0 WHERE done = 1 ")
+		cursor.execute(" UPDATE themes SET available = 0 WHERE available = 1 ")
+		cursor.execute(" UPDATE themes SET used = 0 WHERE used = 1 ")
+		cursor.execute(" UPDATE themes SET available = 1 WHERE id = 1 ")
+		cursor.execute(" UPDATE themes SET used = 1 WHERE id = 1 ")
 		conn.commit()
 		conn.close()
 
