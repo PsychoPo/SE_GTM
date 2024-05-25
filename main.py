@@ -4,7 +4,7 @@ from datetime import datetime
 import res.res_rc
 from sqlite3 import connect, Cursor
 
-# TODO сделать темы и в меню настроить выбор темы
+# TODO сделать зависимость ачивок и тем && сброс ачивок и тем && выбор темы и ее смена
 
 class TimeQuest(QtWidgets.QMainWindow):
 	'''MainWindow class'''
@@ -19,10 +19,13 @@ class TimeQuest(QtWidgets.QMainWindow):
 		row = cursor.fetchone()
 		if row[0] >= 50:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 7")
+			cursor.execute("UPDATE themes SET available = 1 WHERE id = 5")
 		if row[0] >= 100:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 8 ")
+			cursor.execute("UPDATE themes SET available = 1 WHERE id = 6")
 		if row[0] >= 150:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 9 ")
+			cursor.execute("UPDATE themes SET available = 1 WHERE id = 7")
 
 		cursor.execute("SELECT path FROM themes WHERE used = 1")
 		self.path_theme = cursor.fetchone()
@@ -124,17 +127,20 @@ class TimeQuest(QtWidgets.QMainWindow):
 		todayis = cursor.fetchone()
 		if todayis[0] == datetime.now().day:
 			pass
-		if todayis[0] + 1 == datetime.now().day:
+		elif todayis[0] + 1 == datetime.now().day:
 			cursor.execute("UPDATE statistics SET todayis = ?", (str(datetime.now().day),))
 			cursor.execute("UPDATE statistics SET count_everyday_logons = count_everyday_logons + 1")
 			cursor.execute("SELECT count_everyday_logons FROM statistics")
 			count_everyday_logons = cursor.fetchone()
 			if count_everyday_logons[0] >= 5:
 				cursor.execute("UPDATE achievements SET done = 1 WHERE id = 4")
+				cursor.execute("UPDATE themes SET available = 1 WHERE id = 8")
 			if count_everyday_logons[0] >= 10:
 				cursor.execute("UPDATE achievements SET done = 1 WHERE id = 5")
+				cursor.execute("UPDATE themes SET available = 1 WHERE id = 9")
 			if count_everyday_logons[0] >= 15:
 				cursor.execute("UPDATE achievements SET done = 1 WHERE id = 6")
+				cursor.execute("UPDATE themes SET available = 1 WHERE id = 10")
 		else:
 			cursor.execute("UPDATE statistics SET todayis = ?", (str(datetime.now().day),))
 			cursor.execute("UPDATE statistics SET count_everyday_logons = 0")
@@ -166,10 +172,13 @@ class TimeQuest(QtWidgets.QMainWindow):
 		row = cursor.fetchone()
 		if row[1] >= 5:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 1")
+			cursor.execute("UPDATE themes SET available = 1 WHERE id = 2")
 		if row[1] >= 10:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 2 ")
+			cursor.execute("UPDATE themes SET available = 1 WHERE id = 3")
 		if row[1] >= 15:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 3 ")
+			cursor.execute("UPDATE themes SET available = 1 WHERE id = 4")
 
 		conn.commit()
 		conn.close()
@@ -241,6 +250,7 @@ class TimeQuest(QtWidgets.QMainWindow):
 
 		if cursor.execute("SELECT COUNT(*) FROM achievements WHERE done = 1").fetchone()[0] == 9:
 			cursor.execute("UPDATE achievements SET done = 1 WHERE id = 10")
+			cursor.execute("UPDATE themes SET available = 1 WHERE id = 11")
 			conn.commit()
 
 		cursor.execute("SELECT * FROM achievements")
@@ -276,8 +286,13 @@ class TimeQuest(QtWidgets.QMainWindow):
 
 		conn = connect('SQLite//main_db.db')
 		cursor = conn.cursor()
-		
-		cursor.execute("UPDATE statistics SET get_achievements = ?", str(cursor.execute("SELECT COUNT(*) FROM achievements WHERE done = 1").fetchone()[0]))
+
+		count_achievements = cursor.execute("SELECT COUNT(*) FROM achievements WHERE done = 1").fetchone()[0]
+		cursor.execute("UPDATE statistics SET get_achievements = ?", (count_achievements,))
+
+		count_themes = cursor.execute("SELECT COUNT(*) FROM themes WHERE available = 1").fetchone()[0]
+		cursor.execute("UPDATE statistics SET get_themes = ?", (count_themes,))
+
 		conn.commit()
 
 		cursor.execute("SELECT * FROM statistics")
